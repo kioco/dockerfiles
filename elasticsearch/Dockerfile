@@ -5,17 +5,17 @@ ENV ES_VERSION 2.1.0
 ENV ES_HOME /usr/share/elasticsearch
 ENV ES_HEAP_SIZE 512m
 
-RUN echo "deb http://packages.elastic.co/elasticsearch/2.x/debian stable main" > /etc/apt/sources.list.d/elasticsearch-2.x.list \
+RUN echo "deb http://packages.elastic.co/elasticsearch/2.x/debian stable main" > /etc/apt/sources.list.d/elasticsearch.list \
+	&& echo "deb http://packages.elastic.co/curator/3/debian stable main" > /etc/apt/sources.list.d/curator.list \
 	&& wget -qO - https://packages.elastic.co/GPG-KEY-elasticsearch | apt-key add - \
 	&& apt-get update \
-	&& apt-get install -y --no-install-recommends elasticsearch=$ES_VERSION \
+	&& apt-get install -y --no-install-recommends elasticsearch=$ES_VERSION python-elasticsearch-curator \
+	&& $ES_HOME/bin/plugin install license \
+	&& $ES_HOME/bin/plugin install marvel-agent \
 	&& rm -rf /var/lib/apt/lists/*
 
 WORKDIR $ES_HOME
 RUN mkdir config data logs
-
-RUN bin/plugin install license
-RUN bin/plugin install marvel-agent
 
 COPY docker-entrypoint.sh bin/
 COPY elasticsearch.yml config/
