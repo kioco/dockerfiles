@@ -51,7 +51,7 @@ kibana:
 
 zookeeper:
   container_name: zookeeper
-  image: bochen/zookeeper:3.4.6
+  image: bochen/zookeeper:3.4.7
   ports:
     - "2181:2181"
     - "2888:2888"
