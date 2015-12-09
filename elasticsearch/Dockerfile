@@ -10,8 +10,6 @@ RUN echo "deb http://packages.elastic.co/elasticsearch/2.x/debian stable main" >
 	&& wget -qO - https://packages.elastic.co/GPG-KEY-elasticsearch | apt-key add - \
 	&& apt-get update \
 	&& apt-get install -y --no-install-recommends elasticsearch=$ES_VERSION python-elasticsearch-curator \
-	&& $ES_HOME/bin/plugin install license \
-	&& $ES_HOME/bin/plugin install marvel-agent \
 	&& rm -rf /var/lib/apt/lists/*
 
 WORKDIR $ES_HOME
