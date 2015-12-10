@@ -32,6 +32,7 @@ elasticsearch:
     - "9300:9300"
   environment:
     ES_CLUSTER_NAME: Bochen
+    ES_NODE_NAME: Master
 
 scalable-elasticsearch:
   image: bochen/elasticsearch:2.1.0

@@ -13,6 +13,7 @@ fi
 
 if [ -n "$ES_ENABLE_CLUSTER" ]; then
     echo 'discovery.zen.ping.unicast.hosts: ["es"]' >> ${CFG_FILE}
+    echo 'http.enabled: false' >> ${CFG_FILE}
 fi
 
 exec "$@"
