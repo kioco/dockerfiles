@@ -1,48 +1,48 @@
 #!/bin/bash
 
-function hostname_hash() {
+export IP=$(hostname -i)
+export SERVER_PROPS="${KAFKA_HOME}/config/server.properties"
+
+function ip_hash() {
   hash=$(md5sum <<< "$1" | cut -b 1-6)
   echo $((0x${hash%% *}))
 }
 
-hostname="${HOSTNAME:-localhost}"
-server_properties="${KAFKA_HOME}/config/server.properties"
-server_start_bin="${KAFKA_HOME}/bin/kafka-server-start.sh"
-cd "${KAFKA_HOME}"
-
-sed -i "s/-Xmx1G -Xms1G/-Xmx"${KAFKA_XMX}" -Xms"${KAFKA_XMS}"/g" "${server_start_bin}"
-
-sed -i "s/#advertised.host.name.*/advertised.host.name=${hostname}/" "${server_properties}"
-
-sed -i "s/broker.id=0/broker.id=${KAFKA_BROKER_ID:-$(hostname_hash ${hostname})}/" "${server_properties}"
-
-sed -i -e "s/log.retention.check.interval.ms=300000/log.retention.check.interval.ms=60000/" "${server_properties}"
-
-sed -i -e "s/num.recovery.threads.per.data.dir=1/num.recovery.threads.per.data.dir=4/" "${server_properties}"
-
-if [[ -n "${KAFKA_LOG_RETENTION_HOURS}" ]] ; then
-  sed -i -e "s/log.retention.hours=168/log.retention.hours=${KAFKA_LOG_RETENTION_HOURS}/" "${server_properties}"
+if [[ -n "${KAFKA_XMX}" ]] && [[ -n "${KAFKA_XMS}" ]] ; then
+  sed -i "s/-Xmx1G -Xms1G/-Xmx"${KAFKA_XMX}" -Xms"${KAFKA_XMS}"/g" "${KAFKA_HOME}/bin/kafka-server-start.sh"
 fi
 
-if [[ -n "${KAFKA_LOG_RETENTION_BYTES}" ]] ; then
-  sed -i -e "s/.*log.retention.bytes=.*/log.retention.bytes=${KAFKA_LOG_RETENTION_BYTES}/" "${server_properties}"
+if [[ -z "${KAFKA_ZOOKEEPER_CONNECT}" ]]; then
+  export KAFKA_ZOOKEEPER_CONNECT="zk:2181"
 fi
 
-if [[ -n "${KAFKA_LOG_SEGMENT_BYTES}" ]] ; then
-  sed -i -e "s/.*log.segment.bytes=.*/log.segment.bytes=${KAFKA_LOG_SEGMENT_BYTES}/" "${server_properties}"
+if [[ -z "${KAFKA_BROKER_ID}" ]]; then
+  export KAFKA_BROKER_ID=$(ip_hash ${IP})
 fi
 
-if [[ -n "${ZOOKEEPERS}" ]] ; then
-  sed -i "s/zookeeper.connect=zk:2181/zookeeper.connect=${ZOOKEEPERS}/" "${server_properties}"
+if [[ -z "${KAFKA_ADVERTISED_HOST_NAME}" ]]; then
+  export KAFKA_ADVERTISED_HOST_NAME=${IP}
 fi
 
-if ! grep -q "auto.leader.rebalance.enable=true" "${server_properties}"; then
-  echo "auto.leader.rebalance.enable=true" >> "${server_properties}"
+if [[ -z "${KAFKA_LOG_DIRS}" ]]; then
+  export KAFKA_LOG_DIRS="/tmp/kafka-logs/broker-$KAFKA_BROKER_ID"
 fi
 
-if ! grep -q "delete.topic.enable=true" "${server_properties}"; then
-  echo "delete.topic.enable=true" >> "${server_properties}"
-fi
+export KAFKA_AUTO_LEADER_REBALANCE_ENABLE=true
+export KAFKA_DELETE_TOPIC_ENABLE=true
 
-export KAFKA_JMX_OPTS="-Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false -Dcom.sun.management.jmxremote.rmi.port=9898"
+for VAR in `env`
+do
+  if [[ ${VAR} =~ ^KAFKA_ && ! ${VAR} =~ ^KAFKA_HOME && ! ${VAR} =~ ^KAFKA_VERSION && ! ${VAR} =~ ^KAFKA_XM ]]; then
+    kafka_name=`echo "$VAR" | sed -r "s/KAFKA_(.*)=.*/\1/g" | tr '[:upper:]' '[:lower:]' | tr _ .`
+    env_var=`echo "$VAR" | sed -r "s/(.*)=.*/\1/g"`
+    if egrep -q "(^|^#)$kafka_name=" ${SERVER_PROPS}; then
+      sed -r -i "s@(^|^#)($kafka_name)=(.*)@\2=${!env_var}@g" ${SERVER_PROPS}
+    else
+      echo "$kafka_name=${!env_var}" >> ${SERVER_PROPS}
+    fi
+  fi
+done
+
+export KAFKA_JMX_OPTS="-Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false -Djava.rmi.server.hostname="${IP}" -Dcom.sun.management.jmxremote.port=9898 -Dcom.sun.management.jmxremote.rmi.port=9898"
 exec "$@"
