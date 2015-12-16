@@ -1,20 +1,27 @@
 FROM java:8-jre
 MAINTAINER bochen
 
-ENV ZK_VERSION 3.4.7
-ENV ZK_XMS 256m
-ENV ZK_XMX 512m
+ENV ZK_VERSION 3.5.1-alpha
+ENV ZK_HOME /opt/zookeeper-$ZK_VERSION
 
-RUN wget -q -O - http://apache.mirrors.pair.com/zookeeper/zookeeper-"$ZK_VERSION"/zookeeper-"$ZK_VERSION".tar.gz | tar -xzf - -C /opt \
-	&& mv /opt/zookeeper-"$ZK_VERSION" /opt/zookeeper \
-	&& cp /opt/zookeeper/conf/zoo_sample.cfg /opt/zookeeper/conf/zoo.cfg \
-	&& echo "export JVMFLAGS=\"-Xmx"${ZK_XMX}" -Xms"${ZK_XMS}"\"" > /opt/zookeeper/conf/java.env \
+ENV ZK_XMS 128m
+ENV ZK_XMX 512m
+ENV JMXPORT 9696
+
+RUN apt-get update \
+	&& apt-get install -y net-tools \
+	&& rm -rf /var/lib/apt/lists/* \
+	&& wget -q -O - http://apache.mirrors.pair.com/zookeeper/zookeeper-$ZK_VERSION/zookeeper-$ZK_VERSION.tar.gz | tar -xzf - -C /opt \
+	&& mv $ZK_HOME/conf/zoo_sample.cfg $ZK_HOME/conf/zoo.cfg \
 	&& mkdir -p /tmp/zookeeper
 
-WORKDIR /opt/zookeeper
+WORKDIR $ZK_HOME
+COPY docker-entrypoint.sh bin/
+COPY start-zk.sh bin/
 COPY log4j.properties conf/
 
 VOLUME ["/tmp/zookeeper"]
-EXPOSE 2181 2888 3888
+EXPOSE 2181 2888 3888 9696
 
-CMD ["bin/zkServer.sh", "start-foreground"]
+ENTRYPOINT ["bin/docker-entrypoint.sh"]
+CMD ["bin/start-zk.sh"]

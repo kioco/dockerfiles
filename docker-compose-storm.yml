@@ -1,10 +1,23 @@
 zookeeper:
   container_name: zookeeper
-  image: bochen/zookeeper:3.4.7
+  image: bochen/zookeeper:3.5.1-alpha
   ports:
     - "2181:2181"
     - "2888:2888"
     - "3888:3888"
+    - "9696:9696"
+
+scalable-zookeeper:
+  image: bochen/zookeeper:3.5.1-alpha
+  ports:
+    - "2181"
+    - "2888"
+    - "3888"
+    - "9696"
+  environment:
+    ZK_ENABLE_CLUSTER: 1
+  links:
+    - zookeeper:zk
 
 storm-nimbus:
   container_name: storm-nimbus
@@ -28,7 +41,7 @@ storm-ui:
 storm-supervisor:
   image: bochen/storm-supervisor:0.10.0
   ports:
-    - "8000"
+    - "9797"
   links:
     - storm-nimbus:nimbus
     - zookeeper:zk
