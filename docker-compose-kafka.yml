@@ -1,0 +1,30 @@
+zookeeper:
+  container_name: zookeeper
+  image: bochen/zookeeper:3.4.7
+  ports:
+    - "2181:2181"
+    - "2888:2888"
+    - "3888:3888"
+
+kafka:
+  container_name: kafka
+  image: bochen/kafka:0.8.2.2
+  ports:
+    - "9092:9092"
+    - "9898:9898"
+  environment:
+    KAFKA_LOG_RETENTION_HOURS: 1
+    KAFKA_LOG_RETENTION_BYTES: 314572800
+  links:
+    - zookeeper:zk
+
+scalable-kafka:
+  image: bochen/kafka:0.8.2.2
+  ports:
+    - "9092"
+    - "9898"
+  environment:
+    KAFKA_LOG_RETENTION_HOURS: 1
+    KAFKA_LOG_RETENTION_BYTES: 314572800
+  links:
+    - zookeeper:zk
