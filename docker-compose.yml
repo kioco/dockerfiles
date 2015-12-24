@@ -1,6 +1,6 @@
 opscenter:
   container_name: opscenter
-  image: bochen/opscenter:5.2.2
+  image: bochen/opscenter:5.2.3
   ports:
     - "8888:8888"
 

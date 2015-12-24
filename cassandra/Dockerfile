@@ -2,6 +2,7 @@ FROM bochen/datastax-base
 MAINTAINER bochen
 
 ENV CASSANDRA_VERSION 3.0.1
+ENV AGENT_VERSION 5.2.3
 ENV CASSANDRA_CONFIG /etc/cassandra
 
 ENV CASSANDRA_XMS 128M
@@ -12,7 +13,7 @@ RUN apt-get install -y \
 		sudo \
 		supervisor \
 		dsc30="$CASSANDRA_VERSION"-1 \
-		datastax-agent \
+		datastax-agent="$AGENT_VERSION" \
 	&& rm -rf /var/lib/apt/lists/*
 
 COPY docker-entrypoint.sh /
