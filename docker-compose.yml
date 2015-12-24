@@ -12,6 +12,8 @@ cassandra:
     - "9160:9160"
     - "7199:7199"
   environment:
+    CASSANDRA_XMS: 128M
+    CASSANDRA_XMX: 512M
     CASSANDRA_CLUSTER_NAME: Bochen
   links:
     - opscenter
@@ -23,6 +25,8 @@ scalable-cassandra:
     - "9160"
     - "7199"
   environment:
+    CASSANDRA_XMS: 128M
+    CASSANDRA_XMX: 512M
     CASSANDRA_CLUSTER_NAME: Bochen
   links:
     - opscenter
@@ -35,6 +39,7 @@ elasticsearch:
     - "9200:9200"
     - "9300:9300"
   environment:
+    ES_HEAP_SIZE: 512m
     ES_CLUSTER_NAME: Bochen
     ES_NODE_NAME: Master
 
@@ -43,6 +48,7 @@ scalable-elasticsearch:
   ports:
     - "9300"
   environment:
+    ES_HEAP_SIZE: 512m
     ES_CLUSTER_NAME: Bochen
     ES_ENABLE_CLUSTER: 1
   links:
@@ -64,6 +70,9 @@ zookeeper:
     - "2888:2888"
     - "3888:3888"
     - "9696:9696"
+  environment:
+    ZK_XMS: 128m
+    ZK_XMX: 512m
 
 scalable-zookeeper:
   image: bochen/zookeeper:3.5.1-alpha
@@ -73,6 +82,8 @@ scalable-zookeeper:
     - "3888"
     - "9696"
   environment:
+    ZK_XMS: 128m
+    ZK_XMX: 512m
     ZK_ENABLE_CLUSTER: 1
   links:
     - zookeeper:zk
@@ -84,6 +95,8 @@ kafka:
     - "9092:9092"
     - "9898:9898"
   environment:
+    KAFKA_XMS: 256m
+    KAFKA_XMX: 512m
     KAFKA_LOG_RETENTION_HOURS: 1
     KAFKA_LOG_RETENTION_BYTES: 314572800
   links:
@@ -95,6 +108,8 @@ scalable-kafka:
     - "9092"
     - "9898"
   environment:
+    KAFKA_XMS: 256m
+    KAFKA_XMX: 512m
     KAFKA_LOG_RETENTION_HOURS: 1
     KAFKA_LOG_RETENTION_BYTES: 314572800
   links:
@@ -123,6 +138,9 @@ storm-supervisor:
   image: bochen/storm-supervisor:0.10.0
   ports:
     - "9797"
+  environment:
+    WORKER_XMS: 128m
+    WORKER_XMX: 512m
   links:
     - storm-nimbus:nimbus
     - zookeeper:zk

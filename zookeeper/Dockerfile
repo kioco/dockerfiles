@@ -3,9 +3,6 @@ MAINTAINER bochen
 
 ENV ZK_VERSION 3.5.1-alpha
 ENV ZK_HOME /opt/zookeeper-$ZK_VERSION
-
-ENV ZK_XMS 128m
-ENV ZK_XMX 512m
 ENV JMXPORT 9696
 
 RUN apt-get update \

@@ -6,6 +6,9 @@ zookeeper:
     - "2888:2888"
     - "3888:3888"
     - "9696:9696"
+  environment:
+    ZK_XMS: 128m
+    ZK_XMX: 512m
 
 scalable-zookeeper:
   image: bochen/zookeeper:3.5.1-alpha
@@ -15,6 +18,8 @@ scalable-zookeeper:
     - "3888"
     - "9696"
   environment:
+    ZK_XMS: 128m
+    ZK_XMX: 512m
     ZK_ENABLE_CLUSTER: 1
   links:
     - zookeeper:zk
@@ -42,6 +47,9 @@ storm-supervisor:
   image: bochen/storm-supervisor:0.10.0
   ports:
     - "9797"
+  environment:
+    WORKER_XMS: 128m
+    WORKER_XMX: 512m
   links:
     - storm-nimbus:nimbus
     - zookeeper:zk

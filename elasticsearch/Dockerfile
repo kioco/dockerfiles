@@ -3,7 +3,6 @@ MAINTAINER bochen
 
 ENV ES_VERSION 2.1.0
 ENV ES_HOME /usr/share/elasticsearch
-ENV ES_HEAP_SIZE 512m
 
 RUN echo "deb http://packages.elastic.co/elasticsearch/2.x/debian stable main" > /etc/apt/sources.list.d/elasticsearch.list \
 	&& echo "deb http://packages.elastic.co/curator/3/debian stable main" > /etc/apt/sources.list.d/curator.list \

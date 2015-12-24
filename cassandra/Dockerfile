@@ -5,9 +5,6 @@ ENV CASSANDRA_VERSION 3.0.1
 ENV AGENT_VERSION 5.2.3
 ENV CASSANDRA_CONFIG /etc/cassandra
 
-ENV CASSANDRA_XMS 128M
-ENV CASSANDRA_XMX 512M
-
 RUN apt-get install -y \
 		sysstat \
 		sudo \

@@ -5,6 +5,7 @@ elasticsearch:
     - "9200:9200"
     - "9300:9300"
   environment:
+    ES_HEAP_SIZE: 512m
     ES_CLUSTER_NAME: Bochen
     ES_NODE_NAME: Master
 
@@ -13,6 +14,7 @@ scalable-elasticsearch:
   ports:
     - "9300"
   environment:
+    ES_HEAP_SIZE: 512m
     ES_CLUSTER_NAME: Bochen
     ES_ENABLE_CLUSTER: 1
   links:
