@@ -1,6 +1,6 @@
 elasticsearch:
   container_name: elasticsearch
-  image: bochen/elasticsearch:2.1.0
+  image: bochen/elasticsearch:2.1.1
   ports:
     - "9200:9200"
     - "9300:9300"
@@ -10,7 +10,7 @@ elasticsearch:
     ES_NODE_NAME: Master
 
 scalable-elasticsearch:
-  image: bochen/elasticsearch:2.1.0
+  image: bochen/elasticsearch:2.1.1
   ports:
     - "9300"
   environment:
@@ -22,7 +22,7 @@ scalable-elasticsearch:
 
 kibana:
   container_name: kibana
-  image: bochen/kibana:4.3.0
+  image: bochen/kibana:4.3.1
   ports:
     - "5601:5601"
   links:

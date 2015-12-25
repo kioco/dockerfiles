@@ -1,7 +1,7 @@
 FROM java:8-jre
 MAINTAINER bochen
 
-ENV ES_VERSION 2.1.0
+ENV ES_VERSION 2.1.1
 ENV ES_HOME /usr/share/elasticsearch
 
 RUN echo "deb http://packages.elastic.co/elasticsearch/2.x/debian stable main" > /etc/apt/sources.list.d/elasticsearch.list \
