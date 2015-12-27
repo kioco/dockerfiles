@@ -1,5 +1,5 @@
 FROM java:8-jre
-MAINTAINER bochen
+MAINTAINER Piotr Bocheński <bochenski.piotr@gmail.com>
 
 ENV ES_VERSION 2.1.1
 ENV ES_HOME /usr/share/elasticsearch

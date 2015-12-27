@@ -1,5 +1,5 @@
 FROM bochen/datastax-base
-MAINTAINER bochen
+MAINTAINER Piotr Bocheński <bochenski.piotr@gmail.com>
 
 ENV CASSANDRA_VERSION 3.0.1
 ENV AGENT_VERSION 5.2.3

@@ -1,5 +1,5 @@
 FROM java:8-jre
-MAINTAINER bochen
+MAINTAINER Piotr Bocheński <bochenski.piotr@gmail.com>
 
 ENV STORM_VERSION 0.10.0
 ENV STORM_HOME /opt/apache-storm-$STORM_VERSION

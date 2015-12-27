@@ -1,5 +1,5 @@
 FROM java:8-jre
-MAINTAINER bochen
+MAINTAINER Piotr Bocheński <bochenski.piotr@gmail.com>
 
 ENV KIBANA_VERSION 4.3.1
 ENV KIBANA_HOME /opt/kibana-$KIBANA_VERSION-linux-x64

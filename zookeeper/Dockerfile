@@ -1,5 +1,5 @@
 FROM java:8-jre
-MAINTAINER bochen
+MAINTAINER Piotr Bocheński <bochenski.piotr@gmail.com>
 
 ENV ZK_VERSION 3.5.1-alpha
 ENV ZK_HOME /opt/zookeeper-$ZK_VERSION

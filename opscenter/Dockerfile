@@ -1,5 +1,5 @@
 FROM bochen/datastax-base
-MAINTAINER bochen
+MAINTAINER Piotr Bocheński <bochenski.piotr@gmail.com>
 
 ENV OPS_VERSION 5.2.3
 

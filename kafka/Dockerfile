@@ -1,5 +1,5 @@
 FROM java:8-jre
-MAINTAINER bochen
+MAINTAINER Piotr Bocheński <bochenski.piotr@gmail.com>
 
 ENV SCALA_VERSION 2.10
 ENV KAFKA_VERSION 0.8.2.2
