@@ -1,7 +1,7 @@
 #!/bin/bash
 
 export IP=$(hostname -i)
-export SERVER_PROPS="${KAFKA_HOME}/config/server.properties"
+export SERVER_PROPS="config/server.properties"
 
 function ip_hash() {
   hash=$(md5sum <<< "$1" | cut -b 1-6)
@@ -9,11 +9,11 @@ function ip_hash() {
 }
 
 if [[ -n "${KAFKA_XMX}" ]] && [[ -n "${KAFKA_XMS}" ]] ; then
-  sed -i "s/-Xmx1G -Xms1G/-Xmx"${KAFKA_XMX}" -Xms"${KAFKA_XMS}"/g" "${KAFKA_HOME}/bin/kafka-server-start.sh"
+  sed -i "s/-Xmx1G -Xms1G/-Xmx"${KAFKA_XMX}" -Xms"${KAFKA_XMS}"/g" "bin/kafka-server-start.sh"
 fi
 
 if [[ -z "${KAFKA_ZOOKEEPER_CONNECT}" ]]; then
-  export KAFKA_ZOOKEEPER_CONNECT="zk:2181"
+  export KAFKA_ZOOKEEPER_CONNECT=$(./bin/zookeeper-shell.sh zk:2181 <<< 'get /zookeeper/config' | grep ^server. | awk -F '[=:]' '{print $2":"$6}' | awk '$1=$1' RS= OFS=,)
 fi
 
 if [[ -z "${KAFKA_BROKER_ID}" ]]; then
