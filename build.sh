@@ -1,5 +1,7 @@
-#!/bin/bash
+#!/usr/bin/env bash
+set -e
 
+docker build -t="bochen/bochen-base" bochen-base
 docker build -t="bochen/datastax-base" datastax-base
 docker build -t="bochen/opscenter:5.2.3" opscenter
 docker build -t="bochen/cassandra:3.0.1" cassandra
