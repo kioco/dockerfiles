@@ -26,7 +26,7 @@ scalable-zookeeper:
 
 kafka:
   container_name: kafka
-  image: bochen/kafka:0.8.2.2
+  image: bochen/kafka:0.9.0.1
   ports:
     - "9092:9092"
     - "9898:9898"
@@ -39,7 +39,7 @@ kafka:
     - zookeeper:zk
 
 scalable-kafka:
-  image: bochen/kafka:0.8.2.2
+  image: bochen/kafka:0.9.0.1
   ports:
     - "9092"
     - "9898"
