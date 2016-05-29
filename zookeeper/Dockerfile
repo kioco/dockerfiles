@@ -20,9 +20,7 @@ COPY docker-entrypoint.sh bin/
 COPY log4j.properties conf/
 
 VOLUME ["/tmp/zookeeper"]
-
-ENV JVM_ENABLE_JMX true
-EXPOSE 2181 2888 3888 9999
+EXPOSE 2181 2888 3888
 
 ENTRYPOINT ["bin/docker-entrypoint.sh"]
 CMD ["java-wrapper", "-cp", "conf:lib/*:.", "org.apache.zookeeper.server.quorum.QuorumPeerMain", "./conf/zoo.cfg"]

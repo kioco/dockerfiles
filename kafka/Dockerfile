@@ -19,9 +19,7 @@ COPY docker-entrypoint.sh bin/
 COPY log4j.properties config/
 
 VOLUME ["/tmp/kafka-logs"]
-
-ENV JVM_ENABLE_JMX true
-EXPOSE 9092 9999
+EXPOSE 9092
 
 ENTRYPOINT ["bin/docker-entrypoint.sh"]
 CMD ["java-wrapper", "-cp", "config:libs/*:.", "kafka.Kafka", "config/server.properties"]
