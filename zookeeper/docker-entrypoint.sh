@@ -18,10 +18,9 @@ if [ "$ZK_ENABLE_CLUSTER" = true ]; then
     bin/zkServer-initialize.sh --force --myid=${MYID}
     nohup java -cp conf:lib/*:. org.apache.zookeeper.server.quorum.QuorumPeerMain conf/zoo.cfg 2>&1 &
     zkPID=$!
+    while ! nc -w 1 -z localhost 2181; do sleep 1; done
     bin/zkCli.sh -server zk:2181 reconfig -add "server.$MYID=$IP:2888:3888:participant;2181"
-    kill -15 ${zkPID}
-
-    while (netstat -nlp 2> /dev/null | awk '{print $4}' | grep -q ':2181$'); do sleep 1; done
+    kill ${zkPID}
 else
     echo "server.$MYID=$IP:2888:3888;2181" >> conf/zoo.cfg.dynamic
     bin/zkServer-initialize.sh --force --myid=${MYID}
